@@ -103,6 +103,78 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 		ctrl->Bind(wxEVT_CHAR_HOOK, &MainFrame::OnTextKeyDown, this);
 	}
 
+	wxBoxSizer* rootSizer = new wxBoxSizer(wxVERTICAL);
+
+	wxBoxSizer* titleSizer = new wxBoxSizer(wxVERTICAL);
+	titleSizer->Add(Title, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, 10);
+	titleSizer->Add(Title2, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM, 10);
+	rootSizer->Add(titleSizer, 0, wxEXPAND);
+
+	wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	wxBoxSizer* leftSizer = new wxBoxSizer(wxVERTICAL);
+	leftSizer->Add(lefthandText, 0, wxBOTTOM, 5);
+	leftSizer->Add(BookList, 1, wxEXPAND);
+
+	wxBoxSizer* centerSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* topActionsSizer = new wxBoxSizer(wxHORIZONTAL);
+	topActionsSizer->Add(AddButton, 0, wxRIGHT, 5);
+	topActionsSizer->Add(RemoveButton, 0, wxRIGHT, 5);
+	topActionsSizer->Add(SelectionOfBookType, 1, wxEXPAND);
+	centerSizer->Add(topActionsSizer, 0, wxEXPAND | wxBOTTOM, 8);
+
+	centerSizer->Add(ADDText, 0, wxBOTTOM, 4);
+	wxFlexGridSizer* addGrid = new wxFlexGridSizer(2, 6, 6);
+	addGrid->Add(NameOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(GenreOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(AuthorOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(StockOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(PriceOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(IssueOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->Add(PublisherOfSelectedBookADD, 1, wxEXPAND);
+	addGrid->AddSpacer(0);
+	addGrid->AddGrowableCol(0, 1);
+	addGrid->AddGrowableCol(1, 1);
+	centerSizer->Add(addGrid, 0, wxEXPAND | wxBOTTOM, 10);
+
+	wxBoxSizer* cartButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
+	cartButtonsSizer->Add(PutInCart, 0, wxRIGHT, 5);
+	cartButtonsSizer->Add(ClearCart, 0);
+	centerSizer->Add(cartButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxBOTTOM, 10);
+
+	centerSizer->Add(EditButton, 0, wxALIGN_RIGHT | wxBOTTOM, 4);
+
+	wxFlexGridSizer* statusGrid = new wxFlexGridSizer(2, 6, 6);
+	statusGrid->Add(NameOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(GenreOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(AuthorOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(StockOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(PriceOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(IssueOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->Add(PublisherOfSelectedBookSTATUS, 1, wxEXPAND);
+	statusGrid->AddSpacer(0);
+	statusGrid->AddGrowableCol(0, 1);
+	statusGrid->AddGrowableCol(1, 1);
+	centerSizer->Add(statusGrid, 0, wxEXPAND);
+
+	wxBoxSizer* rightSizer = new wxBoxSizer(wxVERTICAL);
+	rightSizer->Add(righthandText, 0, wxBOTTOM, 5);
+	rightSizer->Add(ShoppingCartList, 1, wxEXPAND);
+	wxBoxSizer* checkoutSizer = new wxBoxSizer(wxHORIZONTAL);
+	checkoutSizer->Add(CheckOut, 0, wxRIGHT, 6);
+	checkoutSizer->AddStretchSpacer(1);
+	checkoutSizer->Add(TotalPriceIN_CART, 0, wxALIGN_CENTER_VERTICAL);
+	rightSizer->Add(checkoutSizer, 0, wxEXPAND | wxTOP, 6);
+
+	mainSizer->Add(leftSizer, 1, wxEXPAND | wxALL, 10);
+	mainSizer->Add(centerSizer, 1, wxEXPAND | wxTOP | wxBOTTOM, 10);
+	mainSizer->Add(rightSizer, 1, wxEXPAND | wxALL, 10);
+
+	rootSizer->Add(mainSizer, 1, wxEXPAND);
+
+	tempPanel->SetSizer(rootSizer);
+	rootSizer->SetSizeHints(this);
+
 	AddButtonsAtBegin();
 	AddButton->Disable();
 	
