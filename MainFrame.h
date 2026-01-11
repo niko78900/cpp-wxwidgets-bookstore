@@ -12,6 +12,7 @@ public:
 	~MainFrame();
 private:
 	void ClearBookVector(std::vector<Book*>& items);
+	void OnTextCommand(wxCommandEvent& evt);
 	void OnLeftListBoxSelect(wxCommandEvent& evt);
 	void OnMoveButtonToCartClick(wxCommandEvent& evt);
 	void OnMoveButtonToSelectionClick(wxCommandEvent& evt);

@@ -1,5 +1,6 @@
 #include "MainFrame.h"
 #include<wx/wx.h>
+#include <wx/valnum.h>
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 
@@ -69,6 +70,29 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	PriceOfSelectedBookADD = new wxTextCtrl(tempPanel, wxID_ANY, "Price of the book/magazine", wxPoint(464, 317), wxSize(85, 23));
 	IssueOfSelectedBookADD = new wxTextCtrl(tempPanel, wxID_ANY, "Issue of the magazine", wxPoint(351, 350), wxSize(85, 23));
 	PublisherOfSelectedBookADD = new wxTextCtrl(tempPanel, wxID_ANY, "Publisher of the magazine", wxPoint(464, 350), wxSize(85, 23));
+
+	wxIntegerValidator<int> stockValidator;
+	stockValidator.SetMin(0);
+
+	wxFloatingPointValidator<double> priceValidator(2);
+	priceValidator.SetMin(0.0);
+
+	StockOfSelectedBookSTATUS->SetValidator(stockValidator);
+	StockOfSelectedBookADD->SetValidator(stockValidator);
+	PriceOfSelectedBookSTATUS->SetValidator(priceValidator);
+	PriceOfSelectedBookADD->SetValidator(priceValidator);
+
+	wxAcceleratorEntry accelEntries[4];
+	accelEntries[0].Set(wxACCEL_CTRL, (int)'A', wxID_SELECTALL);
+	accelEntries[1].Set(wxACCEL_CTRL, (int)'C', wxID_COPY);
+	accelEntries[2].Set(wxACCEL_CTRL, (int)'V', wxID_PASTE);
+	accelEntries[3].Set(wxACCEL_CTRL, (int)'X', wxID_CUT);
+	SetAcceleratorTable(wxAcceleratorTable(4, accelEntries));
+
+	Bind(wxEVT_MENU, &MainFrame::OnTextCommand, this, wxID_SELECTALL);
+	Bind(wxEVT_MENU, &MainFrame::OnTextCommand, this, wxID_COPY);
+	Bind(wxEVT_MENU, &MainFrame::OnTextCommand, this, wxID_PASTE);
+	Bind(wxEVT_MENU, &MainFrame::OnTextCommand, this, wxID_CUT);
 	
 	AddButtonsAtBegin();
 	AddButton->Disable();
@@ -97,6 +121,40 @@ void MainFrame::ClearBookVector(std::vector<Book*>& items)
 		delete item;
 	}
 	items.clear();
+}
+
+void MainFrame::OnTextCommand(wxCommandEvent& evt)
+{
+	wxWindow* focused = wxWindow::FindFocus();
+	wxTextCtrl* text = wxDynamicCast(focused, wxTextCtrl);
+	if (!text)
+	{
+		return;
+	}
+
+	switch (evt.GetId())
+	{
+	case wxID_SELECTALL:
+		text->SelectAll();
+		break;
+	case wxID_COPY:
+		text->Copy();
+		break;
+	case wxID_PASTE:
+		if (text->IsEditable())
+		{
+			text->Paste();
+		}
+		break;
+	case wxID_CUT:
+		if (text->IsEditable())
+		{
+			text->Cut();
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void MainFrame::OnLeftListBoxSelect(wxCommandEvent& evt)
