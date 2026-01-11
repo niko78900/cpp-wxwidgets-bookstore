@@ -96,7 +96,7 @@ void MainFrame::OnLeftListBoxSelect(wxCommandEvent& evt)
 		PublisherOfSelectedBookSTATUS->SetEditable(true);
 		PublisherOfSelectedBookSTATUS->Enable(true);
 		
-		Book *selectedItemptr = AvailableBooksSectionVector[selectedIndex];
+		Book* selectedItemptr = AvailableBooksSectionVector[selectedIndex];
 		Book selectedItem = *selectedItemptr;
 		NameOfSelectedBookSTATUS->SetValue(selectedItem.get_title());
 		GenreOfSelectedBookSTATUS->SetValue(selectedItem.get_genre());
@@ -130,7 +130,6 @@ void MainFrame::OnMoveButtonToCartClick(wxCommandEvent& evt)
 	{
 		if (selectedIndex != wxNOT_FOUND)
 		{
-			AvailableBooksSectionVector[selectedIndex];
 
 			if (AvailableBooksSectionVector[selectedIndex]->get_stock() > 0)
 			{
@@ -200,7 +199,6 @@ void MainFrame::OnEditButtonClicked(wxCommandEvent& evt)
 	if (selectedIndex != wxNOT_FOUND)
 	{
 		Book* selectedItemptr = AvailableBooksSectionVector[selectedIndex];
-		Book selectedItem = *selectedItemptr;
 		if (Magazine* Mtemp = dynamic_cast<Magazine*>(selectedItemptr))
 		{
 			double tempPrice;
