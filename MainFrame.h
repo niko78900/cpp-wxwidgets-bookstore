@@ -9,7 +9,9 @@ class MainFrame : public wxFrame
 {
 public:
 	MainFrame(const wxString& title);
+	~MainFrame();
 private:
+	void ClearBookVector(std::vector<Book*>& items);
 	void OnLeftListBoxSelect(wxCommandEvent& evt);
 	void OnMoveButtonToCartClick(wxCommandEvent& evt);
 	void OnMoveButtonToSelectionClick(wxCommandEvent& evt);

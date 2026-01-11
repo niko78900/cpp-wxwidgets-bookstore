@@ -84,6 +84,21 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	AddButton->Bind(wxEVT_BUTTON, &MainFrame::OnAddButtonClicked, this);
 }
 
+MainFrame::~MainFrame()
+{
+	ClearBookVector(CartBooksSectionVector);
+	ClearBookVector(AvailableBooksSectionVector);
+}
+
+void MainFrame::ClearBookVector(std::vector<Book*>& items)
+{
+	for (Book* item : items)
+	{
+		delete item;
+	}
+	items.clear();
+}
+
 void MainFrame::OnLeftListBoxSelect(wxCommandEvent& evt)
 {
 	int selectedIndex = BookList->GetSelection();
@@ -174,7 +189,7 @@ void MainFrame::OnMoveButtonToSelectionClick(wxCommandEvent& evt) //clear button
 		}
 	}
 	// Update changes
-	CartBooksSectionVector.clear();
+	ClearBookVector(CartBooksSectionVector);
 	ShoppingCartList->Clear();
 	AvailableBooksArray.Clear();
 	for (int i = 0; i < AvailableBooksSectionVector.size(); i++)
@@ -188,7 +203,7 @@ void MainFrame::OnMoveButtonToSelectionClick(wxCommandEvent& evt) //clear button
 
 void MainFrame::OnCheckoutButtonClicked(wxCommandEvent& evt)
 {
-	CartBooksSectionVector.clear();
+	ClearBookVector(CartBooksSectionVector);
 	ShoppingCartList->Clear();
 	updateCheckoutPrice();
 }
@@ -249,6 +264,7 @@ void MainFrame::OnRemoveButtonClicked(wxCommandEvent& evt)
 	int selectedIndex = BookList->GetSelection();
 	if (selectedIndex != wxNOT_FOUND)
 	{
+		delete AvailableBooksSectionVector[selectedIndex];
 		AvailableBooksSectionVector.erase(AvailableBooksSectionVector.begin() + selectedIndex);
 		
 		//Update ListBox
