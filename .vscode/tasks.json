@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build wxWidgets app (MSYS2 MINGW64)",
+      "type": "process",
+      "command": "C:\\msys64\\msys2_shell.cmd",
+      "args": [
+        "-mingw64",
+        "-defterm",
+        "-no-start",
+        "-here",
+        "-lc",
+        "g++ *.cpp $(wx-config --cxxflags --libs) -o wx_test.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Run wxWidgets app",
+      "type": "process",
+      "command": "C:\\msys64\\msys2_shell.cmd",
+      "args": [
+        "-mingw64",
+        "-defterm",
+        "-no-start",
+        "-here",
+        "-lc",
+        "./wx_test.exe"
+      ],
+      "dependsOn": "Build wxWidgets app (MSYS2 MINGW64)"
+    }
+  ]
+}
