@@ -9,6 +9,7 @@ class Magazine : public Book
 public:
 	Magazine(wxString title = "NULL", wxString author = "NULL", wxString genre = "NULL", 
 		wxString publisher = "NULL", wxString issue = "NULL", double price = 0.0, int stock = 0);
+	Magazine* clone() const override;
 	wxString get_publisher();
 	wxString get_issue();
 	void set_publisher(wxString x);

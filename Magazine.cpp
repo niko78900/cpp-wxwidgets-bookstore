@@ -12,6 +12,11 @@ Magazine::Magazine(wxString title, wxString author, wxString genre, wxString pub
 	combination = combine_details();
 }
 
+Magazine* Magazine::clone() const
+{
+	return new Magazine(*this);
+}
+
 wxString Magazine::get_publisher()
 {
 	return publisher;

@@ -11,6 +11,11 @@ Book::Book(wxString title, wxString author, wxString genre, double price , int s
 	combination = combine_details();
 }
 
+Book* Book::clone() const
+{
+	return new Book(*this);
+}
+
 wxString Book::combine_details()
 {
 	wxString Sstock = wxString::Format("%d", stock);

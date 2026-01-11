@@ -150,10 +150,10 @@ void MainFrame::OnMoveButtonToCartClick(wxCommandEvent& evt)
 			{
 				AvailableBooksSectionVector[selectedIndex]->decrement_stock();
 				Book* tempptr = AvailableBooksSectionVector[selectedIndex];
-				Book selectedItem = *tempptr;
-				selectedItem.set_stock(1);
-				CartBooksSectionVector.push_back(new Book(selectedItem));
-				ShoppingCartList->Append(selectedItem.combine_details());
+				Book* cartItem = tempptr->clone();
+				cartItem->set_stock(1);
+				CartBooksSectionVector.push_back(cartItem);
+				ShoppingCartList->Append(cartItem->combine_details());
 				BookList->SetString(selectedIndex, AvailableBooksSectionVector[selectedIndex]->combine_details());
 			}
 			else
