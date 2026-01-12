@@ -5,12 +5,14 @@
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 
 	tempPanel = new wxPanel(this);
+
 	Title = new wxStaticText(tempPanel, wxID_ANY, "BookStore", wxPoint(374, 22), wxSize(152, 30));
 	Title2 = new wxStaticText(tempPanel, wxID_ANY, "Written in C++ using the wxWidgets library", wxPoint(187, 63), wxSize(527, 30));
 	wxFont HeadlineFont(wxFontInfo(wxSize(0, 28)).Bold());
 	wxFont HeadlineFont2(wxFontInfo(wxSize(0, 26)));
 	Title->SetFont(HeadlineFont);
 	Title2->SetFont(HeadlineFont2);
+
 	AddButton = new wxButton(tempPanel, wxID_ANY, "Add", wxPoint(352, 164), wxSize(80, 23));
 	RemoveButton = new wxButton(tempPanel, wxID_ANY, "Remove", wxPoint(352, 197), wxSize(80, 23));
 	lefthandText = new wxStaticText(tempPanel, wxID_ANY, "Available books", wxPoint(123, 136), wxSize(90, 15));
@@ -60,6 +62,10 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	CheckOut = new wxButton(tempPanel, wxID_ANY, "Checkout", wxPoint(747, 633), wxSize(62, 23));
 	TotalPrice = "0.00";
 	TotalPriceIN_CART = new wxStaticText(tempPanel, wxID_ANY, "Total: " + TotalPrice, wxPoint(811, 636), wxSize(70, 23));
+	wxButton* actionButtons[] = { AddButton, RemoveButton, PutInCart, ClearCart, EditButton, CheckOut };
+	for (wxButton* button : actionButtons)
+	{
+	}
 	
 	//Adding a book/magazine section
 	ADDText = new wxStaticText(tempPanel, wxID_ANY, "Add a Book/Magazine", wxPoint(388, 228), wxSize(125, 15));
@@ -262,7 +268,7 @@ void MainFrame::OnLeftListBoxSelect(wxCommandEvent& evt)
 {
 	int selectedIndex = BookList->GetSelection();
 	if (selectedIndex != wxNOT_FOUND) {
-		//set buttons to white and working
+		//set fields to active
 		IssueOfSelectedBookSTATUS->SetBackgroundColour(*wxWHITE);
 		IssueOfSelectedBookSTATUS->SetEditable(true);
 		IssueOfSelectedBookSTATUS->Enable(true);
@@ -341,7 +347,7 @@ void MainFrame::OnMoveButtonToSelectionClick(wxCommandEvent& evt) //clear button
 	{
 		for (int j = 0; j < CartBooksSectionVector.size(); j++)
 		{
-			if (AvailableBooksSectionVector[i]->combine_bare_details() == CartBooksSectionVector[j]->combine_bare_details())
+			if (AvailableBooksSectionVector[i]->get_id() == CartBooksSectionVector[j]->get_id())
 			{
 				AvailableBooksSectionVector[i]->set_stock(AvailableBooksSectionVector[i]->get_stock() + 1);
 			}
@@ -373,6 +379,7 @@ void MainFrame::OnEditButtonClicked(wxCommandEvent& evt)
 	if (selectedIndex != wxNOT_FOUND)
 	{
 		Book* selectedItemptr = AvailableBooksSectionVector[selectedIndex];
+		int selectedId = selectedItemptr->get_id();
 		double tempPrice = 0.0;
 		int tempStock = 0;
 		if (!TryParsePriceStock(PriceOfSelectedBookSTATUS, StockOfSelectedBookSTATUS, tempPrice, tempStock))
@@ -398,6 +405,28 @@ void MainFrame::OnEditButtonClicked(wxCommandEvent& evt)
 			AvailableBooksSectionVector[selectedIndex]->set_stock(tempStock);
 			AvailableBooksSectionVector[selectedIndex]->set_title(NameOfSelectedBookSTATUS->GetValue());
 		}
+		for (Book* cartItem : CartBooksSectionVector)
+		{
+			if (cartItem->get_id() != selectedId)
+			{
+				continue;
+			}
+			cartItem->set_author(AuthorOfSelectedBookSTATUS->GetValue());
+			cartItem->set_genre(GenreOfSelectedBookSTATUS->GetValue());
+			cartItem->set_price(tempPrice);
+			cartItem->set_title(NameOfSelectedBookSTATUS->GetValue());
+			if (Magazine* cartMag = dynamic_cast<Magazine*>(cartItem))
+			{
+				cartMag->set_publisher(PublisherOfSelectedBookSTATUS->GetValue());
+				cartMag->set_issue(IssueOfSelectedBookSTATUS->GetValue());
+			}
+		}
+		ShoppingCartList->Clear();
+		for (int i = 0; i < CartBooksSectionVector.size(); i++)
+		{
+			ShoppingCartList->Append(CartBooksSectionVector[i]->combine_details());
+		}
+		updateCheckoutPrice();
 
 		//Update ListBox
 		AvailableBooksArray.Clear();

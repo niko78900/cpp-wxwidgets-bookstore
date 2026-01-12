@@ -4,6 +4,8 @@
 class Book
 {
 protected:
+	static int next_id;
+	int id;
 	wxString title;
 	wxString author;
 	wxString genre;
@@ -18,6 +20,7 @@ public:
 	virtual wxString combine_details(); //combines strings to be placed in the main table
 	virtual wxString get_type();
 	wxString combine_bare_details(); //combines bare strings that make each and every book different for searching/matching purposes
+	int get_id() const;
 	wxString get_title();
 	wxString get_author();
 	wxString get_genre();

@@ -1,8 +1,11 @@
 #include "Book.h"
 #include<iomanip>
 
+int Book::next_id = 1;
+
 Book::Book(wxString title, wxString author, wxString genre, double price , int stock)
 {
+	this->id = next_id++;
 	this->title = title;
 	this->author = author;
 	this->genre = genre;
@@ -26,6 +29,11 @@ wxString Book::combine_details()
 wxString Book::combine_bare_details()
 {
 	return title + ", " + author + ", " + genre;
+}
+
+int Book::get_id() const
+{
+	return id;
 }
 
 wxString Book::get_title()
