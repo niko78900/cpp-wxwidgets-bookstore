@@ -12,6 +12,7 @@ public:
 	~MainFrame();
 private:
 	void ClearBookVector(std::vector<Book*>& items);
+	bool TryParsePriceStock(wxTextCtrl* priceCtrl, wxTextCtrl* stockCtrl, double& priceOut, int& stockOut);
 	void OnTextKeyDown(wxKeyEvent& evt);
 	void OnLeftListBoxSelect(wxCommandEvent& evt);
 	void OnMoveButtonToCartClick(wxCommandEvent& evt);

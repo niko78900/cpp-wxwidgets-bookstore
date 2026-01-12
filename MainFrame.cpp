@@ -204,6 +204,21 @@ void MainFrame::ClearBookVector(std::vector<Book*>& items)
 	items.clear();
 }
 
+bool MainFrame::TryParsePriceStock(wxTextCtrl* priceCtrl, wxTextCtrl* stockCtrl, double& priceOut, int& stockOut)
+{
+	if (!priceCtrl->GetValue().ToDouble(&priceOut) || !stockCtrl->GetValue().ToInt(&stockOut))
+	{
+		wxMessageBox("Please enter numeric values for price and stock.", "Invalid input", wxOK | wxICON_ERROR);
+		return false;
+	}
+	if (priceOut < 0.0 || stockOut < 0)
+	{
+		wxMessageBox("Price and stock must be zero or greater.", "Invalid input", wxOK | wxICON_ERROR);
+		return false;
+	}
+	return true;
+}
+
 void MainFrame::OnTextKeyDown(wxKeyEvent& evt)
 {
 	wxTextCtrl* text = wxDynamicCast(evt.GetEventObject(), wxTextCtrl);
@@ -358,12 +373,14 @@ void MainFrame::OnEditButtonClicked(wxCommandEvent& evt)
 	if (selectedIndex != wxNOT_FOUND)
 	{
 		Book* selectedItemptr = AvailableBooksSectionVector[selectedIndex];
+		double tempPrice = 0.0;
+		int tempStock = 0;
+		if (!TryParsePriceStock(PriceOfSelectedBookSTATUS, StockOfSelectedBookSTATUS, tempPrice, tempStock))
+		{
+			return;
+		}
 		if (Magazine* Mtemp = dynamic_cast<Magazine*>(selectedItemptr))
 		{
-			double tempPrice;
-			PriceOfSelectedBookSTATUS->GetValue().ToDouble(&tempPrice);
-			int tempStock;
-			StockOfSelectedBookSTATUS->GetValue().ToInt(&tempStock);
 			Mtemp->set_author(AuthorOfSelectedBookSTATUS->GetValue());
 			Mtemp->set_genre(GenreOfSelectedBookSTATUS->GetValue());
 			Mtemp->set_price(tempPrice);
@@ -375,10 +392,6 @@ void MainFrame::OnEditButtonClicked(wxCommandEvent& evt)
 		}
 		else
 		{
-			double tempPrice;
-			PriceOfSelectedBookSTATUS->GetValue().ToDouble(&tempPrice);
-			int tempStock;
-			StockOfSelectedBookSTATUS->GetValue().ToInt(&tempStock);
 			AvailableBooksSectionVector[selectedIndex]->set_author(AuthorOfSelectedBookSTATUS->GetValue());
 			AvailableBooksSectionVector[selectedIndex]->set_genre(GenreOfSelectedBookSTATUS->GetValue());
 			AvailableBooksSectionVector[selectedIndex]->set_price(tempPrice);
@@ -468,10 +481,12 @@ void MainFrame::OnChoiceMade(wxCommandEvent& evt)
 
 void MainFrame::OnAddButtonClicked(wxCommandEvent& evt)
 {
-	double tempPrice;
-	int tempStock;
-	PriceOfSelectedBookADD->GetValue().ToDouble(&tempPrice);
-	StockOfSelectedBookADD->GetValue().ToInt(&tempStock);
+	double tempPrice = 0.0;
+	int tempStock = 0;
+	if (!TryParsePriceStock(PriceOfSelectedBookADD, StockOfSelectedBookADD, tempPrice, tempStock))
+	{
+		return;
+	}
 	if (SelectionOfBookType->GetStringSelection() == "Book")
 	{
 		Book T1(NameOfSelectedBookADD->GetValue(), AuthorOfSelectedBookADD->GetValue(), GenreOfSelectedBookADD->GetValue(),	tempPrice, tempStock);
