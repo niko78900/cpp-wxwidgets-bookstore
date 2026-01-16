@@ -13,6 +13,11 @@ public:
 private:
 	void ClearBookVector(std::vector<Book*>& items);
 	bool TryParsePriceStock(wxTextCtrl* priceCtrl, wxTextCtrl* stockCtrl, double& priceOut, int& stockOut);
+	void RefreshAvailableList();
+	void RefreshCartList();
+	int CountCartItemsById(int id) const;
+	int GetAvailableStock(const Book* item) const;
+	int RemoveCartItemsById(int id, int countToRemove = -1);
 	void OnTextKeyDown(wxKeyEvent& evt);
 	void OnLeftListBoxSelect(wxCommandEvent& evt);
 	void OnMoveButtonToCartClick(wxCommandEvent& evt);
@@ -30,12 +35,9 @@ private:
 	wxStaticText* Title2;
 	std::vector<Book*> AvailableBooksSectionVector;
 	std::vector<Book*> CartBooksSectionVector;
-	wxArrayString CartBooksArray;
-	wxArrayString AvailableBooksArray;
 	wxButton* AddButton;
 	wxButton* RemoveButton;
 	wxStaticText* lefthandText;
-	wxArrayString TypeChoices;
 	wxChoice* SelectionOfBookType;
 	wxButton* PutInCart;
 	wxButton* ClearCart;

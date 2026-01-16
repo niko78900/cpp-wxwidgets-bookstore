@@ -19,14 +19,19 @@ Book* Book::clone() const
 	return new Book(*this);
 }
 
-wxString Book::combine_details()
+wxString Book::combine_details() const
 {
-	wxString Sstock = wxString::Format("%d", stock);
-	wxString Sprice = wxString::Format("%.2f",price);
+	return combine_details_with_stock(stock);
+}
+
+wxString Book::combine_details_with_stock(int stockOverride) const
+{
+	wxString Sstock = wxString::Format("%d", stockOverride);
+	wxString Sprice = wxString::Format("%.2f", price);
 	return title + ", " + author + ", " + genre + ", " + Sstock + ", " + Sprice;
 }
 
-wxString Book::combine_bare_details()
+wxString Book::combine_bare_details() const
 {
 	return title + ", " + author + ", " + genre;
 }
@@ -36,27 +41,27 @@ int Book::get_id() const
 	return id;
 }
 
-wxString Book::get_title()
+wxString Book::get_title() const
 {
 	return title;
 }
 
-wxString Book::get_author()
+wxString Book::get_author() const
 {
 	return author;
 }
 
-wxString Book::get_genre()
+wxString Book::get_genre() const
 {
 	return genre;
 }
 
-double Book::get_price()
+double Book::get_price() const
 {
 	return price;
 }
 
-int Book::get_stock()
+int Book::get_stock() const
 {
 	return stock;
 }
@@ -94,7 +99,7 @@ void Book::set_price(double x)
 }
 
 
-wxString Book::get_type()
+wxString Book::get_type() const
 {
 	return "Book";
 }

@@ -1,14 +1,10 @@
 #include "Magazine.h"
 
 Magazine::Magazine(wxString title, wxString author, wxString genre, wxString publisher, wxString issue, double price, int stock)
+	: Book(title, author, genre, price, stock),
+	publisher(publisher),
+	issue(issue)
 {
-	this->title = title;
-	this->author = author;
-	this->genre = genre;
-	this->publisher = publisher; 
-	this->issue = issue;
-	this->price = price;
-	this->stock = stock;
 	combination = combine_details();
 }
 
@@ -17,12 +13,12 @@ Magazine* Magazine::clone() const
 	return new Magazine(*this);
 }
 
-wxString Magazine::get_publisher()
+wxString Magazine::get_publisher() const
 {
 	return publisher;
 }
 
-wxString Magazine::get_issue()
+wxString Magazine::get_issue() const
 {
 	return issue;
 }
@@ -37,14 +33,19 @@ void Magazine::set_issue(wxString x)
 	issue = x;
 }
 
-wxString Magazine::combine_details()
+wxString Magazine::combine_details() const
 {
-	wxString Sstock = wxString::Format("%d", stock); //converts wxString to int number
+	return combine_details_with_stock(stock);
+}
+
+wxString Magazine::combine_details_with_stock(int stockOverride) const
+{
+	wxString Sstock = wxString::Format("%d", stockOverride); //converts wxString to int number
 	wxString Sprice = wxString::Format("%.2f", price); // converts wxString to double number
 	return title + ", " + publisher + ", " + issue + ", " + genre + ", " + Sstock + ", " + Sprice;
 }
 
-wxString Magazine::get_type()
+wxString Magazine::get_type() const
 {
 	return "Magazine";
 }
